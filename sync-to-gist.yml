@@ -1,9 +1,10 @@
 name: Sync File to Gist
 
 on:
+  workflow_dispatch:  # <-- 加这一行，支持在网页上手动点按钮测试
   push:
     branches:
-      - master # 1. 如果你的默认分支叫 master，改写为 master
+      - main # 1. 如果你的默认分支叫 master，改写为 master
     paths:
       - "Shadowrocket_optimized.conf" # 2. 改为你仓库中需要同步的文件相对路径
 
