@@ -1,0 +1,42 @@
+name: Sync File to Gist
+
+on:
+  push:
+    branches:
+      - main # 1. 如果你的默认分支叫 master，改写为 master
+    paths:
+      - "Shadowrocket_optimized.conf" # 2. 改为你仓库中需要同步的文件相对路径
+
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Update Gist via GitHub Script
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GIST_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // 3. 需同步的文件相对路径（与上面的 paths 保持一致）
+            const filePath = 'Shadowrocket_optimized.conf';
+
+            // 4. Gist 中要保存的文件名
+            const gistFilename = 'ssr_opt.conf';
+
+            // 5. 你的 Gist ID（直接填那一串字符，如 'a1b2c3d4e5f6...'）
+            const gistId = 'a6a242532ffcaddcb8dcec2b5d584baf';
+
+            const content = fs.readFileSync(filePath, 'utf8');
+
+            await github.rest.gists.update({
+              gist_id: gistId,
+              files: {
+                [gistFilename]: {
+                  content: content
+                }
+              }
+            });
